@@ -2,19 +2,25 @@ package com.project.user.management.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.project.user.management.dto.UsersRequestDto;
 import com.project.user.management.dto.UsersResponseDto;
 import com.project.user.management.entity.Users;
 import com.project.user.management.repository.UsersRepository;
 
+@Service
 public class UserServiceImplementation 
                implements UsersService{
 	
 	UsersRepository repo;
+	private final PasswordEncoder passwordEncoder;
 
-	public UserServiceImplementation(UsersRepository repo) {
+	public UserServiceImplementation(UsersRepository repo, PasswordEncoder passwordEncoder) {
 		super();
 		this.repo = repo;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -22,7 +28,7 @@ public class UserServiceImplementation
 		Users user = new Users();
 		user.setUsername(userDto.getUsername());
 		user.setEmail(userDto.getEmail());
-		user.setPassword(userDto.getPassword());
+		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		user.setMobile(userDto.getMobile());
 		user.setDob(userDto.getDob());
 		user.setGender(userDto.getGender());
